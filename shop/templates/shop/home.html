@@ -1,0 +1,511 @@
+{% load static %}
+<!DOCTYPE html>
+<html >
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Mobirise v5.9.13, a.mobirise.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <link rel="shortcut icon" href="{% static 'Media\logo.jpg' %}" type="image/x-icon">
+  <meta name="description" content="We offer a delightful variety of tea powders sourced from the lush tea gardens of Assam, delivering an authentic and rich experience with every sip.">
+  <title>Steep Shop</title>
+ 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.reboot.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="https://r.mobirisesite.com/564167/assets/bootstrap/css/bootstrap-reboot.min.css?rnd=1720974240539"> -->
+  <!-- <link rel="stylesheet" href="{% static 'CSS\jarallax.css' %}"> -->
+  <link rel="stylesheet" href="{% static 'CSS\dropdown.css' %}">
+  <link rel="stylesheet" href="{% static 'CSS\socicon.css' %}">
+  <link rel="stylesheet" href="{% static 'CSS\theme.css' %}">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <!-- <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap&display=swap"></noscript> -->
+  <link rel="stylesheet" href="{% static 'CSS\mbr-additional.css' %}" type="text/css">
+   
+
+<style>
+.navbar-fixed-top {
+  top: auto;
+}
+
+
+.navbar.opened {
+    z-index: 1032;
+}
+
+.arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+</style>
+</head>
+<body>
+
+  
+  <section data-bs-version="5.1" class="menu menu2 cid-uiwfSMD8h4" once="menu" id="menu-5-uiwfSMD8h4">
+	
+
+	<nav class="navbar navbar-dropdown navbar-fixed-top navbar-expand-lg">
+		<div class="container">
+			<div class="navbar-brand">
+				<span class="navbar-logo">
+					<a href="https://steepshop.in">
+						<img src="{% static 'Media\logo.jpg' %}" alt="logo" style="height: 4.3rem;">
+					</a>
+				</span>
+				<span class="navbar-caption-wrap"><a class="navbar-caption text-black display-4" href="https://steepshop.in">Steep Shop</a></span>
+			</div>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+				<div class="hamburger">
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav nav-dropdown" data-app-modern-menu="true"><li class="nav-item">
+						<a class="nav-link link text-black display-4" href="{% url 'shop' %}">Varieties</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link link text-black display-4" href="#" aria-expanded="false">About</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link link text-black display-4" href="#">Contact</a>
+					</li></ul>
+				
+				<div class="navbar-buttons mbr-section-btn">
+					<a class="btn btn-primary display-4" href="{% url 'cart' %}">Cart</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+</section>
+
+<section data-bs-version="5.1" class="header18 cid-uiwfSMFHHp mbr-fullscreen" data-bg-video="https://www.youtube.com/embed/5NWABrC0kOI?autoplay=1&amp;loop=1&amp;playlist=5NWABrC0kOI&amp;t=20&amp;mute=1&amp;playsinline=1&amp;controls=0&amp;showinfo=0&amp;autohide=1&amp;allowfullscreen=true&amp;mode=transparent" id="hero-15-uiwfSMFHHp">
+  
+
+  <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(0, 0, 0);"></div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="content-wrap col-12 col-md-12">
+        <h1 class="mbr-section-title mbr-fonts-style mbr-white mb-4 display-1">
+          <strong>Sip Joy</strong>
+        </h1>
+        
+        <p class="mbr-fonts-style mbr-text mbr-white mb-4 display-7">Embark on a Flavorful Journey with Our Exquisite Assam Tea Powders</p>
+        <div class="mbr-section-btn">
+          <a class="btn btn-white-outline display-7" href="{% url 'shop' %}">Discover More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section data-bs-version="5.1" class="article05 cid-uiwfSMFazj" id="about-us-5-uiwfSMFazj">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-12">
+        <div class="card-wrapper">
+          <div class="row">
+            <div class="col-12 col-md-12 col-lg-5 image-wrapper">
+              <img class="w-100" src="{% static 'Media\about-us.jpeg' %}" alt="tea pot">
+            </div>
+            <div class="col-12 col-lg col-md-12">
+              <div class="text-wrapper align-left">
+                <h1 class="mbr-section-title mbr-fonts-style mb-4 display-2">
+                  <strong>Our Tea Tale</strong>
+                </h1>
+                <p class="mbr-text mbr-fonts-style mb-3 display-7">Dive into the rich history of our tea journey, where passion meets perfection in every sip.</p>
+                <p class="mbr-text mbr-fonts-style mb-3 display-7">Crafted with care and dedication, our tea powders from Assam promise an unparalleled experience.</p>
+                <p class="mbr-text mbr-fonts-style display-7">Join us in our commitment to quality, sustainability, and the art of brewing the perfect cup.</p>                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-bs-version="5.1" class="pricing02 cid-uiwfSMGcYl" id="product-list-8-uiwfSMGcYl">
+   
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 content-head">
+                <div class="mbr-section-head mb-5">
+                    <h4 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                        <strong>Explore Our Tea Powders</strong>
+                    </h4>                    
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for p in products %}
+            <div class="item features-image col-12 col-md-6 col-lg-3">
+                <div class="item-wrapper">
+                    <div class="item-img">
+                        <img src="{% static 'Media/products/' %}{{ p.product_name }}.jpg" alt="{{p.product_name}}">
+                    </div>
+                    <div class="item-content">
+                        <h5 class="item-title mbr-fonts-style display-5">
+                            <strong>{{p.product_name}}</strong>
+                        </h5>
+                        <h6 class="item-subtitle mbr-fonts-style display-7">{{p.product_price}}</h6>
+                        <p class="mbr-text mbr-fonts-style display-7">Indulge in the golden hues and rich flavors of this premium Assam tea blend.</p>
+                        <div class="mbr-section-btn item-footer">
+                            <a href="" class="btn item-btn btn-primary display-7">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section data-bs-version="5.1" class="image02 cid-uiwfSMGO3S mbr-fullscreen mbr-parallax-background" id="image-13-uiwfSMGO3S">
+    
+    
+    <div class="container">
+        <div class="row"></div>
+    </div>
+</section>
+
+<section data-bs-version="5.1" class="gallery4 cid-uiwfSMGPGM" id="gallery-12-uiwfSMGPGM">
+  
+  
+  <div class="container-fluid gallery-wrapper">
+    <div class="row justify-content-center">
+      <div class="col-12 content-head">
+        
+      </div>
+    </div>
+    <div class="grid-container">
+      <div class="grid-container-1" style="transform: translate3d(-200px, 0px, 0px);">
+        <div class="grid-item">
+          <img src="{% static 'Media\g-f1.jpeg' %}" alt="tea cup">
+        </div>
+        <div class="grid-item">
+          <img src="{% static 'Media\g-f2.jpeg' %}" alt="tea table">
+        </div>
+        <div class="grid-item">
+          <img src="{% static 'Media\g-f3.jpeg' %}" alt="tea leaf">
+        </div>
+        <div class="grid-item">
+          <img src="{% static 'Media\g-f4.jpeg' %}" alt="tea">
+        </div>
+      </div>
+      <div class="grid-container-2" style="transform: translate3d(-70px, 0px, 0px);">
+        <div class="grid-item">
+          <img src="{% static 'Media\g-b1.jpeg' %}" alt="garden">
+        </div>
+        <div class="grid-item">
+          <img src="{% static 'Media\g-b2.jpeg' %}" alt="plantation">
+        </div>
+        <div class="grid-item">
+          <img src="{% static 'Media\g-b3.jpeg' %}" alt="tea pot">
+        </div>
+        <div class="grid-item">
+          <img src="{% static 'Media\g-b4.jpeg' %}" alt="lemon tea">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section data-bs-version="5.1" class="list1 cid-uiwfSMHKbc" id="faq-1-uiwfSMHKbc">
+    
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-12 col-lg-10 m-auto">
+                <div class="content">
+                    <div class="row justify-content-center mb-5">
+                        <div class="col-12 content-head">
+                            <div class="mbr-section-head">
+                                <h4 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                                    <strong>Tea Wisdom</strong>
+                                </h4>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div id="bootstrap-accordion_8" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">
+                        <div class="card">
+                            <div class="card-header" role="tab" id="headingOne">
+                                <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse1_8" aria-expanded="false" aria-controls="collapse1">
+                                    <h6 class="panel-title-edit mbr-semibold mbr-fonts-style mb-0 display-5">How to Brew Perfect Tea?</h6>
+                                    <span class="sign mbr-iconfont"><i class="arrow"></i></span>
+                                </a>
+                            </div>
+                            <div id="collapse1_8" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_8">
+                                <div class="panel-body">
+                                    <p class="mbr-fonts-style panel-text display-7">To brew the perfect cup, use freshly boiled water and steep the tea for 3-5 minutes. Enjoy the magic!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" role="tab" id="headingOne">
+                                <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse2_8" aria-expanded="false" aria-controls="collapse2">
+                                    <h6 class="panel-title-edit mbr-semibold mbr-fonts-style mb-0 display-5">Tea Varieties Available?</h6>
+                                    <span class="sign mbr-iconfont"><i class="arrow"></i></span>
+                                </a>
+                            </div>
+                            <div id="collapse2_8" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_8">
+                                <div class="panel-body">
+                                    <p class="mbr-fonts-style panel-text display-7">We offer a wide range of tea powders including black, green, and herbal teas sourced from Assam's finest gardens.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" role="tab" id="headingOne">
+                                <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse3_8" aria-expanded="false" aria-controls="collapse3">
+                                    <h6 class="panel-title-edit mbr-semibold mbr-fonts-style mb-0 display-5">Health Benefits of Tea?</h6>
+                                    <span class="sign mbr-iconfont"><i class="arrow"></i></span>
+                                </a>
+                            </div>
+                            <div id="collapse3_8" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_8">
+                                <div class="panel-body">
+                                    <p class="mbr-fonts-style panel-text display-7">Tea is packed with antioxidants and can boost metabolism. It's the elixir of life in a cup!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" role="tab" id="headingOne">
+                                <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse4_8" aria-expanded="false" aria-controls="collapse4">
+                                    <h6 class="panel-title-edit mbr-semibold mbr-fonts-style mb-0 display-5">Tea Recipes to Try?</h6>
+                                    <span class="sign mbr-iconfont"><i class="arrow"></i></span>
+                                </a>
+                            </div>
+                            <div id="collapse4_8" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_8">
+                                <div class="panel-body">
+                                    <p class="mbr-fonts-style panel-text display-7">Explore our blog for exciting tea recipes that will tantalize your taste buds and elevate your tea game!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" role="tab" id="headingOne">
+                                <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse5_8" aria-expanded="false" aria-controls="collapse5">
+                                    <h6 class="panel-title-edit mbr-semibold mbr-fonts-style mb-0 display-5">Tea for Every Mood?</h6>
+                                    <span class="sign mbr-iconfont"><i class="arrow"></i></span>
+                                </a>
+                            </div>
+                            <div id="collapse5_8" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_8">
+                                <div class="panel-body">
+                                    <p class="mbr-fonts-style panel-text display-7">Whether you need a pick-me-up or a calming brew, we have the perfect tea to match your mood and moment.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section data-bs-version="5.1" class="features023 cid-uiwfSMHheu" id="metrics-1-uiwfSMHheu">
+   
+    <div class="container">
+        
+        <div class="row content-row justify-content-center">
+            <div class="item features-without-image col-12 col-md-6 col-lg-4 item-mb">
+                <div class="item-wrapper">
+                    <div class="title mb-2 mb-md-3">
+                        <span class="num mbr-fonts-style display-1">
+                            <strong>1000+</strong></span>
+                    </div>
+                    <h4 class="card-title mbr-fonts-style display-5">
+                        <strong>Happy Sippers</strong>
+                    </h4>
+                    
+                </div>
+            </div>
+            <div class="item features-without-image col-12 col-md-6 col-lg-4 item-mb">
+                <div class="item-wrapper">
+                    <div class="title mb-2 mb-md-3">
+                        <span class="num mbr-fonts-style display-1">
+                            <strong>500+</strong></span>
+                    </div>
+                    <h4 class="card-title mbr-fonts-style display-5">
+                        <strong>Tea Varieties</strong>
+                    </h4>
+                    
+                </div>
+            </div>
+            <div class="item features-without-image col-12 col-md-6 col-lg-4 item-mb">
+                <div class="item-wrapper">
+                    <div class="title mb-2 mb-md-3">
+                        <span class="num mbr-fonts-style display-1">
+                            <strong>99%</strong></span>
+                    </div>
+                    <h4 class="card-title mbr-fonts-style display-5">
+                        <strong>Customer Satisfaction</strong>
+                    </h4>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section data-bs-version="5.1" class="social05 cid-uiwfSMJXTm" id="follow-us-2-uiwfSMJXTm">
+    
+
+    
+
+    <div class="container">
+        <div class="row">
+            <h3 class="mbr-section-title align-center mb-5 mbr-fonts-style display-2">
+                <strong>Join the Tea Party</strong>
+            </h3>
+            <div class="col-12">
+                <div class="social-row">
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon socicon-facebook"></span>
+                        </a>
+                    </div>
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon-twitter socicon"></span>
+                        </a>
+                    </div>
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon-instagram socicon"></span>
+                        </a>
+                    </div>
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon socicon-linkedin"></span>
+                        </a>
+                    </div>
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon socicon-twitch"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section data-bs-version="5.1" class="contacts03 cid-uiwfSMJs3j" id="contacts-11-uiwfSMJs3j">
+  
+
+  
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-4">
+        <div class="col-12 col-md-12">
+          <h5 class="mbr-section-title mbr-fonts-style mt-0 mb-4 display-2">
+            <strong>Tea Hub</strong>
+          </h5>
+          <p class="mbr-section-subtitle mbr-fonts-style mt-0 mb-4 display-7">
+            Call: +91 91189-11860
+            <br>Email: steepshop23@gmail.com
+            <br>Visit: Steep Shop, TP Nagar, 4, Korba-495677, C.G.
+            <br>Opening Hours: Mon-Sat: 10am-8pm
+            Sun: 10am-2pm
+          </p> 
+
+          
+        </div>
+      </div>
+        <div class="col-lg-8 side-features">
+        <div class="google-map"><iframe frameborder="0" style="border:0" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6045.3003145248895!2d-73.9884657!3d40.7477229!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9ac1f1b85%3A0x7e33d1c0e7af3be4!2zMzUwIDV0aCBBdmUsIE5ldyBZb3JrLCBOWSAxMDExOCwg0KHQqNCQ!5e0!3m2!1sru!2sru!4v1689597362021!5m2!1sen!2sen" allowfullscreen=""></iframe></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-bs-version="5.1" class="footer3 cid-uiwfSMJhbt" once="footers" id="footer-3-uiwfSMJhbt">
+
+        
+
+    
+
+    <div class="container">
+        <div class="row">
+            <div class="row-links">
+                <ul class="header-menu">
+                  
+                  
+                  
+                  
+                <li class="header-menu-item mbr-fonts-style display-5">
+                    <a href="#" class="text-white">Home</a>
+                  </li><li class="header-menu-item mbr-fonts-style display-5">
+                    <a href="#" class="text-white">Shop</a>
+                  </li><li class="header-menu-item mbr-fonts-style display-5">
+                    <a href="#" class="text-white">About</a>
+                  </li><li class="header-menu-item mbr-fonts-style display-5">
+                    <a href="#" class="text-white">Contact</a>
+                  </li></ul>
+              </div>
+
+            <div class="col-12 mt-4">
+                <div class="social-row">
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon socicon-facebook display-7"></span>
+                        </a>
+                    </div>
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon-twitter socicon"></span>
+                        </a>
+                    </div>
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon-instagram socicon"></span>
+                        </a>
+                    </div>
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon socicon-linkedin"></span>
+                        </a>
+                    </div>
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon socicon-twitch"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-5">
+                <p class="mbr-fonts-style copyright display-7">© 2024 Steep Shop Blends. All Rights Brewed</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+  <!-- <script src="https://r.mobirisesite.com/564167/assets/web/assets/jquery/jquery.min.js?rnd=1720974240539"></script> -->
+  <script src="https://r.mobirisesite.com/564167/assets/bootstrap/js/bootstrap.bundle.min.js?rnd=1720974240539"></script>
+  <script src="https://r.mobirisesite.com/564167/assets/parallax/jarallax.js?rnd=1720974240539"></script>
+  <script src="https://r.mobirisesite.com/564167/assets/smoothscroll/smooth-scroll.js?rnd=1720974240539"></script>
+  <script src="https://r.mobirisesite.com/564167/assets/ytplayer/index.js?rnd=1720974240539"></script>
+  <script src="https://r.mobirisesite.com/564167/assets/dropdown/js/navbar-dropdown.js?rnd=1720974240539"></script>
+  <!-- <script src="https://r.mobirisesite.com/564167/assets/vimeoplayer/player.js?rnd=1720974240539"></script> -->
+  <script src="https://r.mobirisesite.com/564167/assets/scrollgallery/scroll-gallery.js?rnd=1720974240539"></script>
+  <!-- <script src="https://r.mobirisesite.com/564167/assets/mbr-switch-arrow/mbr-switch-arrow.js?rnd=1720974240539"></script> -->
+  <script src="https://r.mobirisesite.com/564167/assets/theme/js/script.js?rnd=1720974240539"></script>
+  <!-- <script src="https://r.mobirisesite.com/564167/assets/formoid/formoid.min.js?rnd=1720974240539"></script> -->
+  
+  
+  
+</body>
+</html>

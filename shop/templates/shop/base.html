@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html >
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Mobirise v5.9.13, a.mobirise.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <link rel="shortcut icon" href="{% static 'Media\logo.jpg' %}" type="image/x-icon">
+  <meta name="description" content="We offer a delightful variety of tea powders sourced from the lush tea gardens of Assam, delivering an authentic and rich experience with every sip.">
+  <title>Steep Shop</title>
+ 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.reboot.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="https://r.mobirisesite.com/564167/assets/bootstrap/css/bootstrap-reboot.min.css?rnd=1720974240539"> -->
+  <!-- <link rel="stylesheet" href="{% static 'CSS\jarallax.css' %}"> -->
+  <link rel="stylesheet" href="{% static 'CSS\dropdown.css' %}">
+  <link rel="stylesheet" href="{% static 'CSS\socicon.css' %}">
+  <link rel="stylesheet" href="{% static 'CSS\theme.css' %}">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <!-- <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap&display=swap"></noscript> -->
+  <link rel="stylesheet" href="{% static 'CSS\mbr-additional.css' %}" type="text/css">
+
+  <style>
+    .navbar-fixed-top {
+      top: auto;
+    }
+    
+    
+    .navbar.opened {
+        z-index: 1032;
+    }
+    
+    .arrow {
+      border: solid black;
+      border-width: 0 3px 3px 0;
+      display: inline-block;
+      padding: 3px;
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+    }
+    </style>
+
+    </head>
+    <body>
+    
+      
+      <section data-bs-version="5.1" class="menu menu2 cid-uiwfSMD8h4" once="menu" id="menu-5-uiwfSMD8h4">   
+        <nav class="navbar navbar-dropdown navbar-fixed-top navbar-expand-lg">
+            <div class="container">
+                <div class="navbar-brand">
+                    <span class="navbar-logo">
+                        <a href="https://steepshop.in">
+                            <img src="{% static 'Media\logo.jpg' %}" alt="logo" style="height: 4.3rem;">
+                        </a>
+                    </span>
+                    <span class="navbar-caption-wrap"><a class="navbar-caption text-black display-4" href="https://steepshop.in">Steep Shop</a></span>
+                </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <div class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav nav-dropdown" data-app-modern-menu="true">
+                        <li class="nav-item">
+                            <a class="nav-link link text-black display-4" href="{% url 'home' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link text-black display-4" href="#">Varieties</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link text-black display-4" href="#" aria-expanded="false">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link text-black display-4" href="#">Contact</a>
+                        </li></ul>
+                    
+                    <div class="navbar-buttons mbr-section-btn">
+                        <a class="btn btn-primary display-4" href="{% url 'cart' %}">Cart</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </section>
+
+    {% block start %}
+    {% endblock %}
+
+    <section data-bs-version="5.1" class="footer3 cid-uiwfSMJhbt" once="footers" id="footer-3-uiwfSMJhbt">
+
+    <div class="container">
+        <div class="row">
+            <div class="row-links">
+                <ul class="header-menu">
+                  
+                  
+                  
+                  
+                <li class="header-menu-item mbr-fonts-style display-5">
+                    <a href="#" class="text-white">Home</a>
+                  </li><li class="header-menu-item mbr-fonts-style display-5">
+                    <a href="#" class="text-white">Shop</a>
+                  </li><li class="header-menu-item mbr-fonts-style display-5">
+                    <a href="#" class="text-white">About</a>
+                  </li><li class="header-menu-item mbr-fonts-style display-5">
+                    <a href="#" class="text-white">Contact</a>
+                  </li></ul>
+              </div>
+
+            <div class="col-12 mt-4">
+                <div class="social-row">
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon socicon-facebook display-7"></span>
+                        </a>
+                    </div>
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon-twitter socicon"></span>
+                        </a>
+                    </div>
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon-instagram socicon"></span>
+                        </a>
+                    </div>
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon socicon-linkedin"></span>
+                        </a>
+                    </div>
+                    <div class="soc-item">
+                        <a href="#" target="_blank">
+                            <span class="mbr-iconfont socicon socicon-twitch"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-5">
+                <p class="mbr-fonts-style copyright display-7">© 2024 Steep Shop Blends. All Rights Brewed</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+  <!-- <script src="https://r.mobirisesite.com/564167/assets/web/assets/jquery/jquery.min.js?rnd=1720974240539"></script> -->
+  <script src="https://r.mobirisesite.com/564167/assets/bootstrap/js/bootstrap.bundle.min.js?rnd=1720974240539"></script>
+  <script src="https://r.mobirisesite.com/564167/assets/parallax/jarallax.js?rnd=1720974240539"></script>
+  <script src="https://r.mobirisesite.com/564167/assets/smoothscroll/smooth-scroll.js?rnd=1720974240539"></script>
+  <script src="https://r.mobirisesite.com/564167/assets/ytplayer/index.js?rnd=1720974240539"></script>
+  <script src="https://r.mobirisesite.com/564167/assets/dropdown/js/navbar-dropdown.js?rnd=1720974240539"></script>
+  <!-- <script src="https://r.mobirisesite.com/564167/assets/vimeoplayer/player.js?rnd=1720974240539"></script> -->
+  <script src="https://r.mobirisesite.com/564167/assets/scrollgallery/scroll-gallery.js?rnd=1720974240539"></script>
+  <!-- <script src="https://r.mobirisesite.com/564167/assets/mbr-switch-arrow/mbr-switch-arrow.js?rnd=1720974240539"></script> -->
+  <script src="https://r.mobirisesite.com/564167/assets/theme/js/script.js?rnd=1720974240539"></script>
+  <!-- <script src="https://r.mobirisesite.com/564167/assets/formoid/formoid.min.js?rnd=1720974240539"></script> -->
+  
+ 
+</body>
+</html>

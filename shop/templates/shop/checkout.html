@@ -1,0 +1,111 @@
+{% extends "shop\base.html" %}
+{% block start %}
+
+<section data-bs-version="5.1" class="form5 cid-uiwfSMJa91" id="contact-form-3-uiwfSMJa91">
+  <br>    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 content-head">
+                <div class="mbr-section-head mb-5">
+                    <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                        <strong>Checkout</strong>
+                    </h3>                   
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
+                <form action="{% url 'checkout' %}" method="POST" class="mbr-form form-with-styler" data-form-title="Form Name">
+                    {% csrf_token %}
+                    <input type="hidden" name="email" data-form-email="true" value="ThYNnEtPVFVZXKyayM6KHg/EPcEKfu6lDiLUoiM/nY3Ki4qoAXxBXdufvIrpMYL/CmM6bNcuPrhMfTYQNfOUPNdq6TQluELP2HVBNTppT9f6FL5J4VW2QYdgyVuHmzq9">
+                    <div class="row">
+                        <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Thanks for filling out the form!</div>
+                        <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">
+                            Oops...! some problem!
+                        </div>
+                    </div>
+                    <div class="dragArea row">
+                        <div class="col-md col-sm-12 form-group mb-3">
+                            <input type="text" name="first_name" placeholder="First name" class="form-control" value="" id="name-contact-form-3-uiwfSMJa91">
+                        </div>
+                        <div class="col-md col-sm-12 form-group mb-3">
+                            <input type="text" name="last_name" placeholder="Last name" class="form-control" value="" id="name-contact-form-3-uiwfSMJa91">
+                        </div>
+                        <div class="col-sm-12 form-group mb-3">
+                            <input type="email" name="email" placeholder="Email" class="form-control" value="" id="email-contact-form-3-uiwfSMJa91">
+                        </div>
+                        <div class="col-12 form-group mb-3 mb-3">
+                            <input type="number" name="phone" placeholder="Phone" class="form-control" value="" id="url-contact-form-3-uiwfSMJa91">
+                        </div>
+                        <div class="col-12 form-group mb-3">
+                            <textarea name="address" placeholder="Address" class="form-control" id="textarea-contact-form-3-uiwfSMJa91"></textarea>
+                        </div>
+                        <div class="col-md col-sm-12 form-group mb-3">
+                            <input type="text" name="city" placeholder="City" class="form-control" value="" id="url-contact-form-3-uiwfSMJa91">
+                        </div>
+                        <div class="col-md col-sm-12 form-group mb-3">
+                            <input type="text" name="state" placeholder="State" class="form-control" value="" id="url-contact-form-3-uiwfSMJa91">
+                        </div>
+                        <div class="col-md col-sm-12 form-group mb-3">
+                            <input type="text" name="zip" placeholder="Zip Code" class="form-control" value="" id="url-contact-form-3-uiwfSMJa91">
+                        </div><br>
+                        <div class="col-sm-12 form-group mb-3">
+                            <h4>Payment Method:</h4>
+                            <div class="form-control">
+                                <input type="radio" name="payment_method" value="online" id="payment_online">
+                                <label for="payment_online">Online - UPI/Net-Banking</label><br><br>
+                                <input type="radio" name="payment_method" value="cod" id="payment_cod">
+                                <label for="payment_cod">Cash On Delivery</label>
+                            </div>
+                        </div>                        
+                        <div class="col-lg-12 col-md-12 col-sm-12 align-center mbr-section-btn">
+                            <button type="submit" class="btn btn-primary display-7">Brew Me Some Tea</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% load static %}
+
+{% if payment %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<button id="rzp-button1">Pay</button>
+
+<script>
+
+    var logo = "{% static 'Media\logo.jpg' %}";
+    var options = {
+    "key": "rzp_test_LrPemutnPTMIpm",
+    "amount": "{{ payment.amount }}",
+    "currency": "INR",
+    "name": "Steep Shop",
+    "description": "Test Transaction",
+    "image": logo,
+    "order_id": "{{ payment.id }}",
+    "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+    "prefill": {
+        "name": "AM",
+        "email": "asgg@gmail.com",
+        "contact": "0000000000"
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+}
+console.log(options);
+var rzp1 = new Razorpay(options);
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+
+</script>
+{% endif %}
+
+{% endblock %}

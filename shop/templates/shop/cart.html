@@ -1,0 +1,215 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+<style>
+    @import url(http://fonts.googleapis.com/css?family=Calibri:400,300,700);
+
+body {
+    background-color: #eee;
+    font-family: 'Calibri', sans-serif !important;
+}
+
+.mt-100{
+   margin-top:100px;
+
+}
+
+
+.card {
+    margin-bottom: 30px;
+    border: 0;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+    letter-spacing: .5px;
+    border-radius: 8px;
+    -webkit-box-shadow: 1px 5px 24px 0 rgba(68,102,242,.05);
+    box-shadow: 1px 5px 24px 0 rgba(68,102,242,.05);
+}
+
+.card .card-header {
+    background-color: #fff;
+    border-bottom: none;
+    padding: 24px;
+    border-bottom: 1px solid #f6f7fb;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.card-header:first-child {
+    border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+}
+
+
+
+.card .card-body {
+    padding: 30px;
+    background-color: transparent;
+}
+
+.btn-primary, .btn-primary.disabled, .btn-primary:disabled {
+    background-color: #4466f2!important;
+    border-color: #4466f2!important;
+}
+</style>
+{% block start %}
+<section class="mbr-section content4 cid-rLZ6RbBAAD mbr-parallax-background" id="content4-2" style="padding-top: 80px; padding-bottom: 80px;">
+    <div class="container">
+        <div class="media-container-row">
+            <div class="title col-12 col-md-8">
+                <br><br>
+                <h2 class="align-center pb-3 mbr-fonts-style display-2">Cart</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    {% if products %}
+    <div class="row justify-content-center">
+        {% for product in products %}
+        <div id="product-{{product.product_id}}" class="row justify-content-center mbr-fonts-style display-5">
+            <div class="col-3">
+                <img src="{% static 'Media/products/' %}{{ product.product_name }}.jpg" alt="{{ product.product_name }}">
+            </div>        
+            <div class="col">
+                    <div class="row align-center">   
+                        <h1>{{ product.product_name }}</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-1">
+                            <button class="btn btn-outline-secondary btn-sm update-cart" data-id="{{ product.product_id }}" data-action="decrease">-</button>
+                        </div>
+                        <div class="col-1 align-center">
+                            <p id="product-quantity-{{ product.product_id }}">{{ product.quantity }}</p>
+                        </div>
+                        <div class="col-1">
+                            <button class="btn btn-outline-secondary btn-sm update-cart" data-id="{{ product.product_id }}" data-action="increase">+</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <p>Price: Rs.{{ product.price }}</p><br>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+          
+        {% endfor %}
+            <div class="cart-summary mbr-fonts-style display-5">
+                <p>Total items: <span id="total-items">{{ total_items }}</span></p>
+                <p>Total: Rs.<span id="total-amount">{{ amount }}</span></p>
+                <button id="clear-cart" class="btn btn-danger col-sm-12 col-md">Clear Cart</button>
+            </div>
+            <button id="checkout" class="btn btn-primary col-sm-12">Checkout</button>
+        {% else %}
+        <p class="mbr-fonts-style display-5">Your cart is empty.</p>
+        <div class="container-fluid  mt-100">
+            <div class="row">
+               <div class="col-md-12">     
+                    <div class="card">
+                        <div class="card-header">
+                        <h5>Cart</h5>
+                        </div>
+                        <div class="card-body cart">
+                           <div class="col-sm-12 empty-cart-cls text-center">
+                               <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+                               <h3><strong>Your Cart is Empty</strong></h3>
+                               <h4>Add something to make me happy :)</h4>
+                               <a href="#" class="btn btn-primary cart-btn-transform m-3" data-abc="true">continue shopping</a>                           
+                           </div>
+                        </div>
+                    </div>              
+               </div>
+            </div>          
+        </div>
+    {% endif %}
+    <a href="{% url 'shop' %}" class="btn btn-secondary col-sm-12 col-md">Continue Shopping</a>
+    
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+        function updateCart(productId, action) {
+            $.ajax({
+                type: 'POST',
+                url: '{% url "update_cart" %}',
+                data: {
+                    'cart': true,
+                    'product_id': productId,
+                    'quantity': (action == 'increase') ? 1 : -1,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (response.success){
+                        $(`#product-quantity-${productId}`).text(response.quantity);
+                        $(`#total-items`).text(response.total_items);
+                        $(`#total-amount`).text(response.amount);
+
+                        if (response.quantity <= 0){
+                            $(`#product-${productId}`).remove();
+                        }
+                    }
+                    else {
+                        console.error("Error updating cart: " + response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX request failed: ", error);
+                }
+            });
+        }
+
+        $(document).on('click', '.update-cart', function(){
+            let productId = $(this).data('id');
+            let action = $(this).data('action');
+
+            updateCart(productId, action);
+        });
+
+        $('#clear-cart').on('click', function() {
+            $.ajax({
+                type: 'POST',
+                url: '{% url "update_cart" %}',
+                data: {
+                    'clear': true,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response){
+                    if (response.success) {
+                        location.reload();
+                    }
+                    else {
+                        console.error("Error clearing cart: " + response.error);
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.error( "AJAX request failed: ", error);
+                }
+            });
+        });
+
+        $('#checkout').on('click', function() {
+        $.ajax({
+            type: 'POST',
+            url: '{% url "update_cart" %}',
+            data: {
+                'check': true,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = '{% url "checkout" %}';
+                } else {
+                    console.error("Error during checkout: " + response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed: ", error);
+            }
+        });
+    });
+    })
+</script>
+{% endblock %}
