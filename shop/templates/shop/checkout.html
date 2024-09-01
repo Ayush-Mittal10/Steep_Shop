@@ -15,7 +15,7 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
-                <form action="{% url 'checkout' %}" method="POST" class="mbr-form form-with-styler" data-form-title="Form Name">
+                <form action="{% url 'checkout' %}" method="POST" class="mbr-form form-with-styler ckt-form" data-form-title="Form Name">
                     {% csrf_token %}
                     <input type="hidden" name="email" data-form-email="true" value="ThYNnEtPVFVZXKyayM6KHg/EPcEKfu6lDiLUoiM/nY3Ki4qoAXxBXdufvIrpMYL/CmM6bNcuPrhMfTYQNfOUPNdq6TQluELP2HVBNTppT9f6FL5J4VW2QYdgyVuHmzq9">
                     <div class="row">
@@ -48,18 +48,9 @@
                         </div>
                         <div class="col-md col-sm-12 form-group mb-3">
                             <input type="text" name="zip" placeholder="Zip Code" class="form-control" value="" id="url-contact-form-3-uiwfSMJa91">
-                        </div><br>
-                        <div class="col-sm-12 form-group mb-3">
-                            <h4>Payment Method:</h4>
-                            <div class="form-control">
-                                <input type="radio" name="payment_method" value="online" id="payment_online">
-                                <label for="payment_online">Online - UPI/Net-Banking</label><br><br>
-                                <input type="radio" name="payment_method" value="cod" id="payment_cod">
-                                <label for="payment_cod">Cash On Delivery</label>
-                            </div>
-                        </div>                        
+                        </div><br>                       
                         <div class="col-lg-12 col-md-12 col-sm-12 align-center mbr-section-btn">
-                            <button type="submit" class="btn btn-primary display-7">Brew Me Some Tea</button>
+                            <button type="submit" class="btn btn-primary display-7" id="rzp-button1">Proceed To Payment</button>
                         </div>
                     </div>
                 </form>
@@ -70,42 +61,82 @@
 
 {% load static %}
 
-{% if payment %}
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<button id="rzp-button1">Pay</button>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
 
-    var logo = "{% static 'Media\logo.jpg' %}";
-    var options = {
-    "key": "rzp_test_LrPemutnPTMIpm",
-    "amount": "{{ payment.amount }}",
-    "currency": "INR",
-    "name": "Steep Shop",
-    "description": "Test Transaction",
-    "image": logo,
-    "order_id": "{{ payment.id }}",
-    "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
-    "prefill": {
-        "name": "AM",
-        "email": "asgg@gmail.com",
-        "contact": "0000000000"
-    },
-    "notes": {
-        "address": "Razorpay Corporate Office"
-    },
-    "theme": {
-        "color": "#3399cc"
-    }
-}
-console.log(options);
-var rzp1 = new Razorpay(options);
-document.getElementById('rzp-button1').onclick = function(e){
-    rzp1.open();
-    e.preventDefault();
-}
+    $(document).ready(function() {
+        
+        $(document).on('submit', '.ckt-form',function(e){
+            e.preventDefault();
+            let form = $(this);
+            let first_name = form.find('input[name="first_name"]').val();
+            let last_name = form.find('input[name="last_name"]').val();
+            let email = form.find('input[name="email"]').val();
+            let phone = form.find('input[name="phone"]').val();
+            let address = form.find('textarea[name="address"]').val();
+            let city = form.find('input[name="city"]').val();
+            let state = form.find('input[name="state"]').val();
+            let zip = form.find('input[name="zip"]').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url "checkout" %}',
+                data: {
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'email': email,
+                    'phone': phone,
+                    'address': address,
+                    'city': city,
+                    'state': state,
+                    'zip_code': zip,
+                    'payment_method': "online",
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response){
+                    if (response.payment){
+                        var logo = '{% static "Media\logo.jpg" %}';
+                        var options = {
+                        "key": "rzp_test_LrPemutnPTMIpm",
+                        "amount": response.payment.amount,
+                        "currency": "INR",
+                        "name": "Steep Shop",
+                        "description": "Test Transaction",
+                        "image": logo,
+                        "order_id": response.payment.id,
+                        "callback_url": '{% url "success" %}',
+                        "prefill": {
+                            "name": "AM",
+                            "email": response.payment.email,
+                            "contact": response.payment.phone
+                        },
+                        "notes": {
+                            "address": "Razorpay Corporate Office"
+                        },
+                        "theme": {
+                            "color": "#3399cc"
+                        }
+                        }
+                    console.log(options);
+                    var rzp1 = new Razorpay(options);
+                        rzp1.open();
+                        e.preventDefault(); 
+                        }
+                else {
+                    console.error('Payment data not received from server');
+                }              
+                },
+                error: function(xhr, status, error){
+                    console.error('AJAX request failed:', error);
+                }
+            });
+        });
+    });
+
+    
 
 </script>
-{% endif %}
 
 {% endblock %}

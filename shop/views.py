@@ -148,24 +148,6 @@ def update_cart(request):
         
     else:
         response = {'success': False, 'error': 'Invalid product Id'}
-
-    # if crt:
-    #     product_id = request.POST.get('product_id')
-    #     quantity_change = int(request.POST.get('quantity', 0))
-    #     cart = request.session.get('cart', {})
-
-    #     if product_id:
-    #         product_id = str(product_id)
-    #         if product_id in cart:
-    #             cart[product_id] += quantity_change
-    #             if cart[product_id] <= 0:
-    #                 del cart[product_id]
-    #             else:
-    #                 cart[product_id] = 1 if quantity_change > 0 else 0
-    #             request.session['cart'] = cart
-
-    #         else:
-    #             print("Error: Missing product_id in POST request")
     
     return JsonResponse(response)
     
@@ -185,7 +167,7 @@ def checkout(request):
         address = request.POST.get('address')
         city = request.POST.get('city')
         state = request.POST.get('state')
-        zip_code = request.POST.get('zip')
+        zip_code = request.POST.get('zip_code')
         payment_method = request.POST.get('payment_method')
 
         
@@ -226,7 +208,8 @@ def checkout(request):
                 client = razorpay.Client(auth=("rzp_test_LrPemutnPTMIpm", "4R01eQ9BX6GfBXvGT0wd7vyM"))
                 payment = client.order.create({'amount':amount, 'currency':'INR', 'payment_capture':'1'})
                 print(payment)
-                return render(request, 'shop/checkout.html', {'payment': payment, 'name':first_name+last_name, 'email':email, 'phone':phone})
+                response = {'payment': payment, 'name':first_name+" "+last_name, 'email':email, 'phone':phone}
+                return JsonResponse(response)
 
         except Exception as e:
             print(f"Error: {e}")
@@ -234,10 +217,7 @@ def checkout(request):
 
     return render(request, 'shop/checkout.html')
 
-def success(request):
-    return render(request, 'shop/ordered.html')
-
-def sendMail(order_id, email, first_name, last_name, address, order_item, amount):
+def success(request, order_id, first_name, last_name, email, phone, address, city, state, zip_code, amount, payment_id, order_item):
     subject = 'Order Confirmed'
     html_message = render_to_string('shop/email.html', {'order_id': order_id, 'first_name': first_name, 'last_name': last_name, 'address':address, 'order_item': order_item, 'amount': amount})
     plain_message = strip_tags(html_message)
@@ -245,15 +225,4 @@ def sendMail(order_id, email, first_name, last_name, address, order_item, amount
     to = email
     mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
 
-# def cart(request):
-#     cart = request.session.get('cart', {})
-#     products = Product.objects.filter(product_id__in=cart.keys())
-#     total_items = sum(cart.values())
-#     total_price = sum(product.price * quantity for product, quantity in zip(products, cart.values()))
-
-#     return render(request, 'shop/cart.html', {
-#         'cart': cart,
-#         'products': products,
-#         'total_items': total_items,
-#         'total_price': total_price,
-#     })
+    return render(request, 'shop/success.html', {'order_id': order_id, 'first_name': first_name, 'last_name': last_name, 'address':address, 'order_item': order_item, 'amount': amount, 'payment_id': payment_id})

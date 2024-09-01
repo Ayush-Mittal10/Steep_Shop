@@ -36,3 +36,9 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     price = models.IntegerField()
+
+
+class PaymentSignature(models.Model):
+    order_id = models.ForeignKey(Order)
+    payment_id = models.CharField()
+    key_secret = models.CharField()
