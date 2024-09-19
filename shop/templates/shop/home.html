@@ -150,13 +150,13 @@
             <div class="item features-image col-12 col-md-6 col-lg-3">
                 <div class="item-wrapper">
                     <div class="item-img">
-                        <img src="{% static 'Media/products/' %}{{ p.product_name }}.jpg" alt="{{p.product_name}}">
+                        <img src="{% static 'Media/products/' %}{{ p.product.product_name }}.jpg" alt="{{p.product_name}}">
                     </div>
                     <div class="item-content">
                         <h5 class="item-title mbr-fonts-style display-5">
-                            <strong>{{p.product_name}}</strong>
+                            <strong>{{p.product.product_name}}</strong>
                         </h5>
-                        <h6 class="item-subtitle mbr-fonts-style display-7">{{p.product_price}}</h6>
+                        <h6 class="item-subtitle mbr-fonts-style display-7">{{p.price}}</h6>
                         <p class="mbr-text mbr-fonts-style display-7">Indulge in the golden hues and rich flavors of this premium Assam tea blend.</p>
                         <div class="mbr-section-btn item-footer">
                             <a href="" class="btn item-btn btn-primary display-7">Add to Cart</a>

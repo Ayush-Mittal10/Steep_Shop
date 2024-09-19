@@ -11,6 +11,13 @@
         <link rel="stylesheet" href="{% static 'CSS\mbr-additional.css' %}" type="text/css">
 
         <style>
+        .item-wrapper a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .item-wrapper a:hover {
+            color: #333;
+        }
         .product-price {
             font-size: 18px;
             color: #333;
@@ -87,32 +94,35 @@
                     {% for p in products %}
                     
                     <div class="item features-image col-12 col-md-6 col-lg-3">
+                    
                         <div class="item-wrapper">
+                        <a href="{% url 'product' p.product.product_id %}">
                             <div class="item-img">
                                 <img src="{% static 'Media/products/' %}{{ p.product_name }}.jpg" alt="{{p.product_name}}">
                             </div>
+                            
                             <div class="item-content">
                                 <h5 class="item-title mbr-fonts-style display-5">
-                                    <strong>{{p.product_name}}</strong>
+                                    <strong>{{p.product.product_name}}</strong>
                                 </h5>
                                 <h6 class="item-subtitle mbr-fonts-style display-7">
                                     <div class="product-price">
-                                        <span class="price-before-discount">Rs.{{ p.mrp }}</span>
-                                        <span class="price-after-discount">Rs.{{ p.price }}</span>
+                                        <span class="price-before-discount" id="mrp-{{ p.id }}">Rs.{{ p.mrp }}</span>
+                                        <span class="price-after-discount" id="price-{{ p.id }}">Rs.{{ p.price }}</span>
                                     </div>
                                 </h6>
                                 <p class="mbr-text mbr-fonts-style display-7">Indulge in the golden hues and rich flavors of this premium Assam tea blend.</p>
-                                <div id="product-controls-{{p.product_id}}">
-                                    {% if cart|get_item:p.product_id %}
+                                <div id="product-controls-{{p.id}}" class="mt-3">
+                                    {% if cart|get_item:p.id %}
                                     <div class="quantity-controls">
-                                        <button class="btn btn-secondary minus-btn" data-id="{{p.product_id}}">-</button>
-                                        <span class="quantity-{{p.product_id}}">{{cart|get_item:p.product_id}}</span>
-                                        <button class="btn btn-secondary plus-button" data-id="{{p.product_id}}">+</button>
+                                        <button class="btn btn-secondary minus-btn" data-id="{{p.id}}">-</button>
+                                        <span class="quantity-{{p.id}}">{{cart|get_item:p.id}}</span>
+                                        <button class="btn btn-secondary plus-button" data-id="{{p.id}}">+</button>
                                     </div>
                                     {% else %}
-                                    <form method="POST" action="{% url 'update_cart' %}" class="add-to-cart-form" id="form-{{p.product_id}}">
+                                    <form method="POST" action="{% url 'update_cart' %}" class="add-to-cart-form" id="form-{{p.id}}">
                                         {% csrf_token %} 
-                                        <input type="hidden" name="product_id" value="{{ p.product_id }}">
+                                        <input type="hidden" name="product_id" value="{{ p.id }}">
                                         <input type="hidden" name="quantity" value='1'>
                                         <div class="mbr-section-btn item-footer">
                                           <button type="submit" class="btn item-btn btn-primary display-7">Add to Cart</button>
@@ -121,7 +131,9 @@
                                     {% endif %}
                                 </div>   
                             </div>
+                        </a>
                         </div>
+                    
                     </div> 
                     
                     {% endfor %}  
@@ -187,6 +199,11 @@
 <script>
 $(document).ready(function() {
     $.ajaxSetup({ cache: false });
+    document.querySelectorAll('.minus-btn, .plus-button').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    });
 
     $(document).on('submit', '.add-to-cart-form', function(e) {
         e.preventDefault();
@@ -199,7 +216,7 @@ $(document).ready(function() {
             type: 'POST',
             url: form.attr('action'),
             data: {
-                'product_id': productId,
+                'variant_id': productId,
                 'quantity': quantity,
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
             },
@@ -231,7 +248,7 @@ $(document).ready(function() {
             type: 'POST',
             url: '{% url "update_cart" %}',
             data: {
-                'product_id': productId,
+                'variant_id': productId,
                 'quantity': quantityChange,
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
             },

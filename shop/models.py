@@ -5,17 +5,22 @@ from django.db import models
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True)
     product_name = models.CharField(max_length=50)
+    product_desc = models.TextField()
+    publish_date = models.DateField()
+
+    def __str__(self) -> str:
+        return self.product_name
+
+class ProductVariant(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     product_image = models.ImageField(upload_to='products/')
     size = models.CharField(max_length=50, choices=(('small','250 g'), ('medium','500 g'), ('large','1 Kg')), default='medium')
     mrp = models.IntegerField()
     price = models.IntegerField()
-    product_desc = models.TextField()
-    publish_date = models.DateField()
     stock = models.IntegerField()
-    
-    def __str__(self) -> str:
-        return self.product_name
 
+    def __str__(self) -> str:
+        return f'{self.product.product_name} - {self.size}'
 
 class Order(models.Model):
     order_id = models.AutoField(primary_key=True)
@@ -33,12 +38,11 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     price = models.IntegerField()
 
-
 class PaymentSignature(models.Model):
-    order_id = models.ForeignKey(Order)
-    payment_id = models.CharField()
-    key_secret = models.CharField()
+    order_id = models.ForeignKey(Order, on_delete=models.CASCADE)
+    payment_id = models.CharField(max_length=100)
+    key_secret = models.CharField(max_length=100)

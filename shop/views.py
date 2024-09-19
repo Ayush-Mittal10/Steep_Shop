@@ -1,8 +1,9 @@
 import random
 from django.shortcuts import redirect, render
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views import View
 from django.views.decorators.http import require_POST
+import razorpay.errors
 from shop.models import *
 from django.db.models import Sum
 from django.views.decorators.csrf import csrf_exempt
@@ -12,25 +13,33 @@ from django.template import Context
 from django.core import serializers
 from shop.forms import AddToCartForm
 import razorpay
+from django.conf import settings
 from django.utils.html import strip_tags
 from django.core import mail
-
+import hmac
+import hashlib
 
 # Create your views here.
 def home(request):
-    queryset = Product.objects.all()
+    queryset = ProductVariant.objects.filter(size='medium').select_related('product')
     cart = request.session.get('cart', {})
     return render(request, "shop/home.html", {'products':queryset, 'cart':cart})
 
-def shop(request):
-    queryset = Product.objects.all()
+def all_products(request):
+    queryset = ProductVariant.objects.filter(size='medium').select_related('product')
     cart = request.session.get('cart', {})
     return render(request, "shop/products.html", {'products':queryset, 'cart':cart})
 
 def product(request, product_id):
-    product = Product.objects.filter(product_id__in=product_id)
-    product = product[0]
+    product = Product.objects.get(product_id=product_id)
+    variants = ProductVariant.objects.filter(product=product)
+    print(variants)
 
+    context = {
+        'product': product,
+        'variants': variants,
+        'cart': request.session.get('cart', {})
+    }
     products = Product.objects.all()
     form = AddToCartForm(request.POST)
     if form.is_valid():
@@ -50,10 +59,10 @@ def product(request, product_id):
 
         else:
             print("Error: Missing product_id in POST request")
-    context = {
-        'product': product,
-        'products': products
-    }
+        context = {
+            'product': product,
+            'products': products
+        }
     return render(request, "shop/viewProduct.html", context)
 
 class carting(View):
@@ -85,10 +94,11 @@ class carting(View):
             request.session['cart'] = {}
             return redirect('cart')
         cart = request.session.get('cart', {})
-        products = Product.objects.filter(product_id__in=cart.keys())
+        print(cart)
+        products = ProductVariant.objects.filter(id__in=cart.keys())
         
         for product in products:
-            product.quantity = cart.get(str(product.product_id))
+            product.quantity = cart.get(str(product.id))
         
         total_items = sum(cart.values())
         total_price = sum(product.price * quantity for product, quantity in zip(products, cart.values()))
@@ -117,31 +127,31 @@ def update_cart(request):
     cart = request.session.get('cart')
     if check and cart:
         return JsonResponse({'success': True})
-    product_id = request.POST.get('product_id')
+    variant_id = request.POST.get('variant_id')
     quantity_change = int(request.POST.get('quantity', 0))
     if not cart:
         cart = {}
 
-    if product_id:
-        product_id = str(product_id)
-        if product_id in cart:
-            cart[product_id] += quantity_change
-            if cart[product_id] <= 0:
-                del cart[product_id]
+    if variant_id:
+        variant_id = str(variant_id)
+        if variant_id in cart:
+            cart[variant_id] += quantity_change
+            if cart[variant_id] <= 0:
+                del cart[variant_id]
         else:
-            cart[product_id] = max(quantity_change, 1)
+            cart[variant_id] = max(quantity_change, 1)
 
         request.session['cart'] = cart
-        products = Product.objects.filter(product_id__in=cart.keys())
+        products = ProductVariant.objects.filter(id__in=cart.keys())
         
         for product in products:
-            product.quantity = cart.get(str(product.product_id))
+            product.quantity = cart.get(str(product.id))
         
         total_items = sum(cart.values())
         total_price = sum(product.price * quantity for product, quantity in zip(products, cart.values()))
         response = {
             'success': True,
-            'quantity': cart.get(product_id, 0),
+            'quantity': cart.get(variant_id, 0),
             'total_items': total_items,
             'amount': total_price
             }
@@ -170,10 +180,12 @@ def checkout(request):
         zip_code = request.POST.get('zip_code')
         payment_method = request.POST.get('payment_method')
 
-        
-        products = Product.objects.filter(product_id__in=cart.keys())
+        request.session['name'] = first_name + ' ' + last_name
+        request.session['email'] = email
+        products = ProductVariant.objects.filter(id__in=cart.keys())
         amount = sum(product.price * quantity for product, quantity in zip(products, cart.values()))
         print(amount)
+        print(request.session.items())
 
         try:
             order = Order(
@@ -192,7 +204,7 @@ def checkout(request):
             print(payment_method)
 
             for product in products:
-                quantity = cart.get(str(product.product_id))
+                quantity = cart.get(str(product.id))
                 order_item = OrderItem(
                     order=order,
                     product=product,
@@ -200,7 +212,7 @@ def checkout(request):
                     price=product.price
                 )
                 order_item.save()
-                print(f"OrderItem saved with Product ID: {product.product_id}")
+                print(f"OrderItem saved with Product ID: {product.id}")
 
             request.session['cart'] = {}
             if payment_method == 'online':
@@ -208,7 +220,7 @@ def checkout(request):
                 client = razorpay.Client(auth=("rzp_test_LrPemutnPTMIpm", "4R01eQ9BX6GfBXvGT0wd7vyM"))
                 payment = client.order.create({'amount':amount, 'currency':'INR', 'payment_capture':'1'})
                 print(payment)
-                response = {'payment': payment, 'name':first_name+" "+last_name, 'email':email, 'phone':phone}
+                response = {'payment': payment, 'name':first_name+" "+last_name, 'email':email, 'phone':phone, 'order_id':order.order_id}
                 return JsonResponse(response)
 
         except Exception as e:
@@ -217,12 +229,44 @@ def checkout(request):
 
     return render(request, 'shop/checkout.html')
 
-def success(request, order_id, first_name, last_name, email, phone, address, city, state, zip_code, amount, payment_id, order_item):
-    subject = 'Order Confirmed'
-    html_message = render_to_string('shop/email.html', {'order_id': order_id, 'first_name': first_name, 'last_name': last_name, 'address':address, 'order_item': order_item, 'amount': amount})
-    plain_message = strip_tags(html_message)
-    from_email = 'mynewmail0506@gmail.com'
-    to = email
-    mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+def success(request):
+    if request.method == 'POST':
+        
+        razorpay_payment_id = request.POST.get('razorpay_payment_id')
+        razorpay_order_id = request.POST.get('razorpay_order_id')
+        razorpay_signature = request.POST.get('razorpay_signature')
+        # order_id = request.POST.get('order_id')
+        # email = request.POST.get('email')
+        # name = request.POST.get('name')
 
-    return render(request, 'shop/success.html', {'order_id': order_id, 'first_name': first_name, 'last_name': last_name, 'address':address, 'order_item': order_item, 'amount': amount, 'payment_id': payment_id})
+        # print(f"Email id: {email}")
+        # print(f"Name: {name}")
+        # print(f"Order ID: {order_id}")
+        # print(request.session.items())
+
+        # if verify_razorpay_signature(razorpay_order_id, razorpay_payment_id, razorpay_signature):
+
+        #     send_mail('Order Confirmation', f"""Hi {name}, 
+        #             Your order with order ID: {order_id} has been placed successfully.""", 
+        #             settings.EMAIL_HOST_USER, [email], fail_silently=False)
+
+        #     send_mail('New Order Received', f'A new order has been placed by {name}. Order Id: {order_id}',
+        #             settings.EMAIL_HOST_USER, ['ayushmittal0506@gmail.com'], fail_silently=False)
+
+        return render(request, 'shop/ordered.html')
+
+    return redirect('home')
+
+def verify_razorpay_signature(razorpay_order_id, razorpay_payment_id, razorpay_signature):
+    
+    try:
+        client = razorpay.Client(auth=("rzp_test_LrPemutnPTMIpm", "4R01eQ9BX6GfBXvGT0wd7vyM"))
+        client.utility.verify_payment_signature({
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_payment_id': razorpay_payment_id,
+            'razorpay_signature': razorpay_signature
+            })
+        return True
+    except razorpay.errors.SignatureVerificationError as e:
+        print(f"Error: {e}")
+        return False

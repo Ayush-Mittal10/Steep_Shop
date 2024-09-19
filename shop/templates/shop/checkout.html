@@ -17,13 +17,6 @@
             <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
                 <form action="{% url 'checkout' %}" method="POST" class="mbr-form form-with-styler ckt-form" data-form-title="Form Name">
                     {% csrf_token %}
-                    <input type="hidden" name="email" data-form-email="true" value="ThYNnEtPVFVZXKyayM6KHg/EPcEKfu6lDiLUoiM/nY3Ki4qoAXxBXdufvIrpMYL/CmM6bNcuPrhMfTYQNfOUPNdq6TQluELP2HVBNTppT9f6FL5J4VW2QYdgyVuHmzq9">
-                    <div class="row">
-                        <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Thanks for filling out the form!</div>
-                        <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">
-                            Oops...! some problem!
-                        </div>
-                    </div>
                     <div class="dragArea row">
                         <div class="col-md col-sm-12 form-group mb-3">
                             <input type="text" name="first_name" placeholder="First name" class="form-control" value="" id="name-contact-form-3-uiwfSMJa91">
@@ -63,7 +56,10 @@
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+{% url 'success' as success_url %}
+<script>
+    console.log("Callback URL: {{ success_url }}");
+</script>
 <script>
 
     $(document).ready(function() {
@@ -74,6 +70,7 @@
             let first_name = form.find('input[name="first_name"]').val();
             let last_name = form.find('input[name="last_name"]').val();
             let email = form.find('input[name="email"]').val();
+            console.log(email);
             let phone = form.find('input[name="phone"]').val();
             let address = form.find('textarea[name="address"]').val();
             let city = form.find('input[name="city"]').val();
@@ -97,7 +94,7 @@
                 },
                 success: function(response){
                     if (response.payment){
-                        var logo = '{% static "Media\logo.jpg" %}';
+                        var logo = "{% static 'Media/logo.jpg' %}";
                         var options = {
                         "key": "rzp_test_LrPemutnPTMIpm",
                         "amount": response.payment.amount,
@@ -106,11 +103,36 @@
                         "description": "Test Transaction",
                         "image": logo,
                         "order_id": response.payment.id,
-                        "callback_url": '{% url "success" %}',
+                        "callback_url": ''
+                        "handler": function (res) {
+                            console.log("Handler function triggered");
+                            console.log("razorpay_payment_id:", res.razorpay_payment_id);
+                            console.log("razorpay_order_id:", res.razorpay_order_id);
+                            console.log("razorpay_signature:", res.razorpay_signature);
+
+                            $.ajax({
+                                type: 'POST',
+                                url: '{% url "success" %}',
+                                data: {
+                                    'razorpay_payment_id': res.razorpay_payment_id,
+                                    'razorpay_order_id': res.razorpay_order_id,
+                                    'razorpay_signature': res.razorpay_signature,
+                                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                                },
+                                success: function(data) {
+                                    console.log("Payment successfully processed on the server:", data);
+                                    window.location.href = "{% url 'success' %}";
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error('Failed to send payment details to the server:', error);
+                                    alert("Payment processing failed. Please try again.");
+                                }
+                            });
+                        },
                         "prefill": {
-                            "name": "AM",
-                            "email": response.payment.email,
-                            "contact": response.payment.phone
+                            "name": response.name,
+                            "email": response.email,
+                            "contact": response.phone
                         },
                         "notes": {
                             "address": "Razorpay Corporate Office"
@@ -121,6 +143,9 @@
                         }
                     console.log(options);
                     var rzp1 = new Razorpay(options);
+                    rzp1.on('payment.failed', function (res){
+                        console.error("Payment failed:", res);
+                    });
                         rzp1.open();
                         e.preventDefault(); 
                         }
@@ -135,7 +160,6 @@
         });
     });
 
-    
 
 </script>
 
