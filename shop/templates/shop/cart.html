@@ -66,29 +66,29 @@ body {
 <div class="container">
     {% if products %}
     <div class="row justify-content-center">
-        {% for product in products %}
-        <div id="product-{{product.product_id}}" class="row justify-content-center mbr-fonts-style display-5">
+        {% for p in products %}
+        <div id="product-{{p.id}}" class="row justify-content-center mbr-fonts-style display-5">
             <div class="col-3">
-                <img src="{% static 'Media/products/' %}{{ product.product_name }}.jpg" alt="{{ product.product_name }}">
+                <img src="{% static 'Media/products/' %}{{ p.product.product_name }}.jpg" alt="{{ p.product.product_name }}">
             </div>        
             <div class="col">
                     <div class="row align-center">   
-                        <h1>{{ product.product_name }}</h1>
+                        <h1>{{ p.product.product_name }}</h1>
                     </div>
                     <div class="row">
                         <div class="col-1">
-                            <button class="btn btn-outline-secondary btn-sm update-cart" data-id="{{ product.product_id }}" data-action="decrease">-</button>
+                            <button class="btn btn-outline-secondary btn-sm update-cart" data-id="{{ p.id }}" data-action="decrease">-</button>
                         </div>
                         <div class="col-1 align-center">
-                            <p id="product-quantity-{{ product.product_id }}">{{ product.quantity }}</p>
+                            <p id="product-quantity-{{ p.id }}">{{ p.quantity }}</p>
                         </div>
                         <div class="col-1">
-                            <button class="btn btn-outline-secondary btn-sm update-cart" data-id="{{ product.product_id }}" data-action="increase">+</button>
+                            <button class="btn btn-outline-secondary btn-sm update-cart" data-id="{{ p.id }}" data-action="increase">+</button>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-3">
-                            <p>Price: Rs.{{ product.price }}</p><br>
+                            <p>Price: Rs.{{ p.price }}</p><br>
                         </div>
                     </div>
             </div>
@@ -137,7 +137,7 @@ body {
                 url: '{% url "update_cart" %}',
                 data: {
                     'cart': true,
-                    'product_id': productId,
+                    'variant_id': productId,
                     'quantity': (action == 'increase') ? 1 : -1,
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                 },

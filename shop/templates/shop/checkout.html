@@ -103,32 +103,7 @@
                         "description": "Test Transaction",
                         "image": logo,
                         "order_id": response.payment.id,
-                        "callback_url": ''
-                        "handler": function (res) {
-                            console.log("Handler function triggered");
-                            console.log("razorpay_payment_id:", res.razorpay_payment_id);
-                            console.log("razorpay_order_id:", res.razorpay_order_id);
-                            console.log("razorpay_signature:", res.razorpay_signature);
-
-                            $.ajax({
-                                type: 'POST',
-                                url: '{% url "success" %}',
-                                data: {
-                                    'razorpay_payment_id': res.razorpay_payment_id,
-                                    'razorpay_order_id': res.razorpay_order_id,
-                                    'razorpay_signature': res.razorpay_signature,
-                                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                                },
-                                success: function(data) {
-                                    console.log("Payment successfully processed on the server:", data);
-                                    window.location.href = "{% url 'success' %}";
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error('Failed to send payment details to the server:', error);
-                                    alert("Payment processing failed. Please try again.");
-                                }
-                            });
-                        },
+                        "callback_url": "http://127.0.0.1:8000{{success_url}}?name=" + encodeURIComponent(response.name) + "&email=" + encodeURIComponent(response.email), 
                         "prefill": {
                             "name": response.name,
                             "email": response.email,

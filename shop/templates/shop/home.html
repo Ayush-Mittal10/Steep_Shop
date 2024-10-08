@@ -158,9 +158,14 @@
                         </h5>
                         <h6 class="item-subtitle mbr-fonts-style display-7">{{p.price}}</h6>
                         <p class="mbr-text mbr-fonts-style display-7">Indulge in the golden hues and rich flavors of this premium Assam tea blend.</p>
-                        <div class="mbr-section-btn item-footer">
-                            <a href="" class="btn item-btn btn-primary display-7">Add to Cart</a>
-                        </div>
+                        <form method="POST" action="{% url 'update_cart' %}" class="add-to-cart-form" id="form-{{p.id}}">
+                            {% csrf_token %} 
+                            <input type="hidden" name="product_id" value="{{ p.id }}">
+                            <input type="hidden" name="quantity" value='1'>
+                            <div class="mbr-section-btn item-footer">
+                              <button type="submit" class="btn item-btn btn-primary display-7">Add to Cart</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -492,7 +497,48 @@
     </div>
 </section>
 
-
+<script>
+    $(document).ready(function() {
+        $.ajaxSetup({ cache: false });
+        document.querySelectorAll('.minus-btn, .plus-button').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
+        });
+    
+        $(document).on('submit', '.add-to-cart-form', function(e) {
+            e.preventDefault();
+    
+            let form = $(this);
+            let productId = form.find('input[name="product_id"]').val();
+            let quantity = form.find('input[name="quantity"]').val();
+    
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: {
+                    'variant_id': productId,
+                    'quantity': quantity,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        let controlsHtml = `
+                        <div class="quantity-controls">
+                            <span id="added">Added</span>
+                        </div>`;
+                        $(`#product-controls-${productId}`).html(controlsHtml);
+                    } else {
+                        console.error("Error updating cart: " + response.error);
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.error("AJAX request failed: ", error);
+                }
+            });
+        });
+    });
+    </script>
   <!-- <script src="https://r.mobirisesite.com/564167/assets/web/assets/jquery/jquery.min.js?rnd=1720974240539"></script> -->
   <script src="https://r.mobirisesite.com/564167/assets/bootstrap/js/bootstrap.bundle.min.js?rnd=1720974240539"></script>
   <script src="https://r.mobirisesite.com/564167/assets/parallax/jarallax.js?rnd=1720974240539"></script>

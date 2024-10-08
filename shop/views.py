@@ -129,6 +129,12 @@ def update_cart(request):
         return JsonResponse({'success': True})
     variant_id = request.POST.get('variant_id')
     quantity_change = int(request.POST.get('quantity', 0))
+    buy = request.POST.get('buy')
+    if buy:
+        cart = {}
+        cart[variant_id] = max(quantity_change, 1)
+        request.session['cart'] = cart
+        return JsonResponse({'success': True})
     if not cart:
         cart = {}
 
@@ -229,29 +235,29 @@ def checkout(request):
 
     return render(request, 'shop/checkout.html')
 
+@csrf_exempt
 def success(request):
     if request.method == 'POST':
         
         razorpay_payment_id = request.POST.get('razorpay_payment_id')
         razorpay_order_id = request.POST.get('razorpay_order_id')
         razorpay_signature = request.POST.get('razorpay_signature')
-        # order_id = request.POST.get('order_id')
-        # email = request.POST.get('email')
-        # name = request.POST.get('name')
+        order_id = request.POST.get('order_id')
+        email = request.GET.get('email')
+        name = request.GET.get('name')
 
-        # print(f"Email id: {email}")
-        # print(f"Name: {name}")
-        # print(f"Order ID: {order_id}")
-        # print(request.session.items())
+        print(f"Email id: {email}")
+        print(f"Name: {name}")
+        print(f"Order ID: {order_id}")
 
-        # if verify_razorpay_signature(razorpay_order_id, razorpay_payment_id, razorpay_signature):
+        if verify_razorpay_signature(razorpay_order_id, razorpay_payment_id, razorpay_signature):
 
-        #     send_mail('Order Confirmation', f"""Hi {name}, 
-        #             Your order with order ID: {order_id} has been placed successfully.""", 
-        #             settings.EMAIL_HOST_USER, [email], fail_silently=False)
+            send_mail('Order Confirmation', f"""Hi {name}, 
+                    Your order with order ID: {order_id} has been placed successfully.""", 
+                    settings.EMAIL_HOST_USER, [email], fail_silently=False)
 
-        #     send_mail('New Order Received', f'A new order has been placed by {name}. Order Id: {order_id}',
-        #             settings.EMAIL_HOST_USER, ['ayushmittal0506@gmail.com'], fail_silently=False)
+            send_mail('New Order Received', f'A new order has been placed by {name}. Order Id: {order_id}',
+                    settings.EMAIL_HOST_USER, ['ayushmittal0506@gmail.com'], fail_silently=False)
 
         return render(request, 'shop/ordered.html')
 

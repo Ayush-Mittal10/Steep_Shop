@@ -131,20 +131,20 @@
               <div class="col-md-4 col-6 mb-3">
                 <label class="mb-2 d-block">Quantity</label>
                 <div class="input-group mb-3" style="width: 170px;">
-                  <button class="btn btn-white border border-secondary px-3" type="button" id="button-addon1" data-mdb-ripple-color="dark">
-                    <i class="fas fa-minus"></i>
+                  <button class="btn btn-white border border-secondary px-3" type="button" id="quantity-decrement" data-mdb-ripple-color="dark">
+                    -
                   </button>
-                  <input type="text" class="form-control text-center border border-secondary" placeholder="14" aria-label="Example text with button addon" aria-describedby="button-addon1" />
-                  <button class="btn btn-white border border-secondary px-3" type="button" id="button-addon2" data-mdb-ripple-color="dark">
-                    <i class="fas fa-plus"></i>
+                  <input type="text" class="form-control text-center border border-secondary" id="quantity-input" value="1" aria-label="Quantity" aria-describedby="button-addon1" />
+                  <button class="btn btn-white border border-secondary px-3" type="button" id="quantity-increment" data-mdb-ripple-color="dark">
+                    +
                   </button>
                 </div>
               </div>
             </div>
-            <form action="post">
-              <button type="submit" class="btn btn-warning shadow-0"> Buy now </button>
-              <button type="submit" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </button>
-              <a href="#" class="btn btn-light border border-secondary py-2 icon-hover px-3"> <i class="me-1 fa fa-heart fa-lg"></i> Save </a>
+            <form method="post" id="add-to-cart-form">
+              {% csrf_token %}
+              <button type="button" id="buy-now" class="btn btn-warning shadow-0"> Buy now </button>
+              <button type="submit" id="add-to-cart" class="btn btn-primary shadow-0"> Add to cart </button>
             </form>
           </div>
         </main>
@@ -291,70 +291,76 @@
       </div>
     </div>
   </section>
-    {% endblock %}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const variantSelect = document.getElementById('variant_id');
-    const priceElement = document.getElementById('product-price');
-
-    variantSelect.addEventListener('change', function () {
-      const selectedOption = this.options[this.selectedIndex];
-      const newPrice = selectedOption.getAttribute('data-price');
       
-      // Update the price in the DOM
-      if (newPrice) {
-        priceElement.textContent = 'Rs.' + newPrice;
-      }
-    });
-  });
+      $(document).ready(function() {
+        console.log("RUNNING");
+          $('#variant_id').on('change', function() {
+              var price = $(this).find(':selected').data('price');
+              $('#product-price').text('Rs. ' + price);
+          });
 
+          document.getElementById('quantity-increment').addEventListener('click', function () {
+          let quantityInput = document.getElementById('quantity-input');
+          let currentValue = parseInt(quantityInput.value);
+          quantityInput.value = currentValue + 1;
+});
 
-      $(document).ready(function(){
-     
-      $('#addToCartBtn').click(function(e){
-        e.preventDefault();
+document.getElementById('quantity-decrement').addEventListener('click', function () {
+    let quantityInput = document.getElementById('quantity-input');
+    let currentValue = parseInt(quantityInput.value);
+    if (currentValue > 1) {
+        quantityInput.value = currentValue - 1;
+    }
+});
+          $(document).on('submit', '#add-to-cart-form', function(e) {
+              e.preventDefault();
+              var variantId = $('#variant_id').val();
+              var quantity = $('#quantity-input').val();
+              console.log(variantId, quantity);
+              $.ajax({
+                  type: 'POST',
+                  url: '{% url "update_cart" %}',
+                  data: {
+                      'variant_id': variantId,
+                      'quantity': quantity,
+                      'csrfmiddlewaretoken': '{{ csrf_token }}'
+                  },
+                  success: function(response) {
+                      alert('Item added to cart successfully');
+                  },
+                  error: function() {
+                      alert('Error adding item to cart');
+                  }
+              });
+          });
 
-        var productId = product.id;
-        var quantity = $('#quantityInput').val();
-
-        $.ajax({
-          url: '/add-to-cart',
-          type: 'POST',
-          data: { productId: productId, quantity: quantity },
-          success: function(response){
-            console.log('Item added to cart:', response);
-          },
-          error: function(xhr, status, error){
-            console.error('Error adding item to cart:', error);
-          }
-        });
+          $(document).on('click', '#buy-now', function(e) {
+              e.preventDefault();
+              var variantId = $('#variant_id').val();
+              var quantity = $('#quantity-input').val();
+              console.log(variantId, quantity);
+              $.ajax({
+                  type: 'POST',
+                  url: '{% url "update_cart" %}',
+                  data: {
+                      'buy': true,
+                      'variant_id': variantId,
+                      'quantity': quantity,
+                      'csrfmiddlewaretoken': '{{ csrf_token }}'
+                  },
+                  success: function(response) {
+                      window.location.href = '{% url "cart" %}';
+                  },
+                  error: function() {
+                      alert('Error adding item to cart');
+                  }
+              });
+          });
       });
-
-      $('#buyNowBtn').click(function(e){
-        e.preventDefault(); 
-
-        var productId = product.id;
-        var quantity = $('#quantityInput').val();
-
-        $.ajax({
-          url: '/buy-now',
-          type: 'POST',
-          data: { productId: productId, quantity: quantity },
-          success: function(response){
-            console.log('Item added to cart:', response);
-            window.location.href = '/checkout';
-          },
-          error: function(xhr, status, error){
-            console.error('Error adding item to cart:', error);
-          }
-        });
-      });
-    });
-    </script>
-
+  </script>
+    {% endblock %}
 </body>
 </html>
