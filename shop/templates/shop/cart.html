@@ -1,5 +1,6 @@
 {% extends "shop/base.html" %}
 {% load static %}
+{% load template_filters %}
 
 <style>
     @import url(http://fonts.googleapis.com/css?family=Calibri:400,300,700);
@@ -14,41 +15,27 @@ body {
 
 }
 
-
 .card {
-    margin-bottom: 30px;
-    border: 0;
-    -webkit-transition: all .3s ease;
-    transition: all .3s ease;
-    letter-spacing: .5px;
-    border-radius: 8px;
-    -webkit-box-shadow: 1px 5px 24px 0 rgba(68,102,242,.05);
-    box-shadow: 1px 5px 24px 0 rgba(68,102,242,.05);
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+.card-title {
+    font-weight: bold;
 }
 
-.card .card-header {
-    background-color: #fff;
-    border-bottom: none;
-    padding: 24px;
-    border-bottom: 1px solid #f6f7fb;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+.btn-outline-secondary {
+    border-color: #ced4da;
 }
-
-.card-header:first-child {
-    border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+.btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+    color: #212529;
 }
-
-
-
-.card .card-body {
-    padding: 30px;
-    background-color: transparent;
+#total-items, #total-amount {
+    font-weight: bold;
 }
-
-.btn-primary, .btn-primary.disabled, .btn-primary:disabled {
-    background-color: #4466f2!important;
-    border-color: #4466f2!important;
+.img-fluid {
+    max-height: 150px;
+    object-fit: cover;
 }
 </style>
 {% block start %}
@@ -63,75 +50,71 @@ body {
     </div>
 </section>
 
-<div class="container">
+<div class="container my-5">
     {% if products %}
-    <div class="row justify-content-center">
-        {% for p in products %}
-        <div id="product-{{p.id}}" class="row justify-content-center mbr-fonts-style display-5">
-            <div class="col-3">
-                <img src="{% static 'Media/products/' %}{{ p.product.product_name }}.jpg" alt="{{ p.product.product_name }}">
-            </div>        
-            <div class="col">
-                    <div class="row align-center">   
-                        <h1>{{ p.product.product_name }}</h1>
+    <h1 class="mb-4">Your Cart</h1>
+    <div class="row">
+        <div class="col-md-8">
+            {% for p in products %}
+            <div id="product-{{p.id}}" class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-3">
+                        <img src="{{ p.product_image.url }}" class="img-fluid rounded-start" alt="{{ p.product.product_name }}">
                     </div>
-                    <div class="row">
-                        <div class="col-1">
-                            <button class="btn btn-outline-secondary btn-sm update-cart" data-id="{{ p.id }}" data-action="decrease">-</button>
-                        </div>
-                        <div class="col-1 align-center">
-                            <p id="product-quantity-{{ p.id }}">{{ p.quantity }}</p>
-                        </div>
-                        <div class="col-1">
-                            <button class="btn btn-outline-secondary btn-sm update-cart" data-id="{{ p.id }}" data-action="increase">+</button>
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ p.product.product_name }}</h5>
+                            <p class="card-text">Pack Size: {{ p.get_size_display }}</p>
+                            <div class="d-flex align-items-center mb-3">
+                                <button class="btn btn-outline-secondary btn-sm update-cart" data-id="{{ p.id }}" data-action="decrease">-</button>
+                                <span id="product-quantity-{{ p.id }}" class="mx-2">{{ p.quantity }}</span>
+                                <button class="btn btn-outline-secondary btn-sm update-cart" data-id="{{ p.id }}" data-action="increase">+</button>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <p>Price: Rs.<span id="product-price-{{ p.id }}">{{ p.price }}</span></p>
+                                </div>
+                                <div class="col-3">
+                                    <p>Amount: Rs.<span id="product-amount-{{ p.id }}">{{ p.price|multiply:p.quantity }}</span></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-3">
-                            <p>Price: Rs.{{ p.price }}</p><br>
-                        </div>
-                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Order Summary</h5>
+                    <p class="card-text">Total items: <span id="total-items">{{ total_items }}</span></p>
+                    <p class="card-text">Total: <strong>Rs.<span id="total-amount">{{ amount }}</span></strong></p>
+                    <button id="checkout" class="btn btn-primary w-100 mb-2">Proceed to Checkout</button>
+                    <button id="clear-cart" class="btn btn-outline-danger w-100">Clear Cart</button>
+                </div>
             </div>
         </div>
     </div>
-          
-        {% endfor %}
-            <div class="cart-summary mbr-fonts-style display-5">
-                <p>Total items: <span id="total-items">{{ total_items }}</span></p>
-                <p>Total: Rs.<span id="total-amount">{{ amount }}</span></p>
-                <button id="clear-cart" class="btn btn-danger col-sm-12 col-md">Clear Cart</button>
-            </div>
-            <button id="checkout" class="btn btn-primary col-sm-12">Checkout</button>
-        {% else %}
-        <p class="mbr-fonts-style display-5">Your cart is empty.</p>
-        <div class="container-fluid  mt-100">
-            <div class="row">
-               <div class="col-md-12">     
-                    <div class="card">
-                        <div class="card-header">
-                        <h5>Cart</h5>
-                        </div>
-                        <div class="card-body cart">
-                           <div class="col-sm-12 empty-cart-cls text-center">
-                               <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
-                               <h3><strong>Your Cart is Empty</strong></h3>
-                               <h4>Add something to make me happy :)</h4>
-                               <a href="#" class="btn btn-primary cart-btn-transform m-3" data-abc="true">continue shopping</a>                           
-                           </div>
-                        </div>
-                    </div>              
-               </div>
-            </div>          
+    {% else %}
+    <div class="card">
+        <div class="card-body text-center">
+            <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4" alt="Empty Cart">
+            <h3><strong>Your Cart is Empty</strong></h3>
+            <p class="mb-4">Add something to make me happy :)</p>
+            <a href="{% url 'shop' %}" class="btn btn-primary">Continue Shopping</a>
         </div>
+    </div>
     {% endif %}
-    <a href="{% url 'shop' %}" class="btn btn-secondary col-sm-12 col-md">Continue Shopping</a>
-    
+    <div class="text-center mt-4">
+        <a href="{% url 'shop' %}" class="btn btn-secondary">Continue Shopping</a>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function(){
-        function updateCart(productId, action) {
+        function updateCart(productId, action, price) {
             $.ajax({
                 type: 'POST',
                 url: '{% url "update_cart" %}',
@@ -146,6 +129,9 @@ body {
                         $(`#product-quantity-${productId}`).text(response.quantity);
                         $(`#total-items`).text(response.total_items);
                         $(`#total-amount`).text(response.amount);
+
+                        let newAmount = price * response.quantity;
+                        $(`#product-amount-${productId}`).text(newAmount);
 
                         if (response.quantity <= 0){
                             $(`#product-${productId}`).remove();
@@ -164,8 +150,9 @@ body {
         $(document).on('click', '.update-cart', function(){
             let productId = $(this).data('id');
             let action = $(this).data('action');
+            let price = parseFloat($(`#product-price-${productId}`).text());
 
-            updateCart(productId, action);
+            updateCart(productId, action, price);
         });
 
         $('#clear-cart').on('click', function() {

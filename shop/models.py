@@ -13,7 +13,7 @@ class Product(models.Model):
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     product_image = models.ImageField(upload_to='products/')
-    size = models.CharField(max_length=50, choices=(('small','250 g'), ('medium','500 g'), ('large','1 Kg')), default='medium')
+    size = models.CharField(max_length=50, choices=(('small','250 g'), ('medium','500 g'), ('large','1 kg')), default='medium')
     mrp = models.IntegerField()
     price = models.IntegerField()
     stock = models.IntegerField()

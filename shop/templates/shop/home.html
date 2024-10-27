@@ -13,13 +13,10 @@
  
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.reboot.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <!-- <link rel="stylesheet" href="https://r.mobirisesite.com/564167/assets/bootstrap/css/bootstrap-reboot.min.css?rnd=1720974240539"> -->
-  <!-- <link rel="stylesheet" href="{% static 'CSS\jarallax.css' %}"> -->
   <link rel="stylesheet" href="{% static 'CSS\dropdown.css' %}">
   <link rel="stylesheet" href="{% static 'CSS\socicon.css' %}">
   <link rel="stylesheet" href="{% static 'CSS\theme.css' %}">
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <!-- <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap&display=swap"></noscript> -->
   <link rel="stylesheet" href="{% static 'CSS\mbr-additional.css' %}" type="text/css">
    
 
@@ -150,7 +147,7 @@
             <div class="item features-image col-12 col-md-6 col-lg-3">
                 <div class="item-wrapper">
                     <div class="item-img">
-                        <img src="{% static 'Media/products/' %}{{ p.product.product_name }}.jpg" alt="{{p.product_name}}">
+                        <img src="{{p.product_image.url}}" alt="{{p.product.product_name}}">
                     </div>
                     <div class="item-content">
                         <h5 class="item-title mbr-fonts-style display-5">
@@ -338,7 +335,7 @@
                 <div class="item-wrapper">
                     <div class="title mb-2 mb-md-3">
                         <span class="num mbr-fonts-style display-1">
-                            <strong>500+</strong></span>
+                            <strong>6+</strong></span>
                     </div>
                     <h4 class="card-title mbr-fonts-style display-5">
                         <strong>Tea Varieties</strong>
@@ -496,23 +493,19 @@
         </div>
     </div>
 </section>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         $.ajaxSetup({ cache: false });
-        document.querySelectorAll('.minus-btn, .plus-button').forEach(button => {
-            button.addEventListener('click', function(event) {
-                event.stopPropagation();
-            });
-        });
-    
+        console.log("Document ready");
         $(document).on('submit', '.add-to-cart-form', function(e) {
             e.preventDefault();
-    
+
             let form = $(this);
             let productId = form.find('input[name="product_id"]').val();
-            let quantity = form.find('input[name="quantity"]').val();
-    
+            console.log(productId);
+            let quantity = 1;
+
             $.ajax({
                 type: 'POST',
                 url: form.attr('action'),
@@ -523,11 +516,7 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        let controlsHtml = `
-                        <div class="quantity-controls">
-                            <span id="added">Added</span>
-                        </div>`;
-                        $(`#product-controls-${productId}`).html(controlsHtml);
+                        form.find('button[type="submit"]').text('Added').prop('disabled', true);
                     } else {
                         console.error("Error updating cart: " + response.error);
                     }
@@ -538,18 +527,14 @@
             });
         });
     });
-    </script>
-  <!-- <script src="https://r.mobirisesite.com/564167/assets/web/assets/jquery/jquery.min.js?rnd=1720974240539"></script> -->
+</script>
   <script src="https://r.mobirisesite.com/564167/assets/bootstrap/js/bootstrap.bundle.min.js?rnd=1720974240539"></script>
   <script src="https://r.mobirisesite.com/564167/assets/parallax/jarallax.js?rnd=1720974240539"></script>
   <script src="https://r.mobirisesite.com/564167/assets/smoothscroll/smooth-scroll.js?rnd=1720974240539"></script>
   <script src="https://r.mobirisesite.com/564167/assets/ytplayer/index.js?rnd=1720974240539"></script>
   <script src="https://r.mobirisesite.com/564167/assets/dropdown/js/navbar-dropdown.js?rnd=1720974240539"></script>
-  <!-- <script src="https://r.mobirisesite.com/564167/assets/vimeoplayer/player.js?rnd=1720974240539"></script> -->
   <script src="https://r.mobirisesite.com/564167/assets/scrollgallery/scroll-gallery.js?rnd=1720974240539"></script>
-  <!-- <script src="https://r.mobirisesite.com/564167/assets/mbr-switch-arrow/mbr-switch-arrow.js?rnd=1720974240539"></script> -->
   <script src="https://r.mobirisesite.com/564167/assets/theme/js/script.js?rnd=1720974240539"></script>
-  <!-- <script src="https://r.mobirisesite.com/564167/assets/formoid/formoid.min.js?rnd=1720974240539"></script> -->
   
   
   

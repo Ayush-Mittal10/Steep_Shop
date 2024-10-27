@@ -9,7 +9,6 @@ from django.db.models import Sum
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail, EmailMessage
 from django.template.loader import get_template, render_to_string
-from django.template import Context
 from django.core import serializers
 from shop.forms import AddToCartForm
 import razorpay

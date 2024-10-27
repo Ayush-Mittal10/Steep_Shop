@@ -17,3 +17,14 @@ def get_price(variants, size):
         return variants.get(size=size).price
     except ProductVariant.DoesNotExist:
         return None
+    
+@register.filter(name='get_image')
+def get_image(variants, size):
+    try:
+        return variants.get(size=size).product_image.url
+    except ProductVariant.DoesNotExist:
+        return None
+    
+@register.filter(name='multiply')
+def multiply(value, arg):
+    return value * arg
