@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-*d#bw==kkgcn@a5$plrdnyo87e9)*^ifd9p==1@uxqq3@41!q1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://steep-shop.onrender.com']
+ALLOWED_HOSTS = ['https://steep-shop.onrender.com', '.vercel.app']
 
 
 # Application definition
